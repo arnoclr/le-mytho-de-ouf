@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Le Mytho de Ouf</title>
+    <meta name="theme-color" content="#7855C7">
+    <meta name="description"
+        content="Un sujet de débat saugrenu commun à tous les joueurs, sauf pour un qui n'en a pas connaissance ! (Concept Odah & Dako)">
+
+    <link rel="stylesheet" href="style.css?v=1">
+    <script defer src="app.js?v=1"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js"
+        integrity="sha256-gOkV4d9/FmMNEkjOzVlyM2eNAWSUXisT+1RbMTTIgXI=" crossorigin="anonymous"></script>
+</head>
+
+<body x-data="app">
+
+    <noscript>
+        <strong>Ce jeu nécéssite d'activer Javascript.</strong>
+        <br>
+        <p>Cherchez l'option javascript dans les paramètres avancés de votre navigateur ou utilisez un autre
+            navigateur.</p>
+    </noscript>
+
+    <section x-show="section == 'start'">
+        <h1>Le mytho de OUF !</h1>
+        <p>Un sujet de débat saugrenu commun à tous les joueurs, sauf pour un qui n'en a pas connaissance ! (Concept
+            Odah & Dako)</p>
+
+        <iframe width="1280" height="720" src="https://www.youtube-nocookie.com/embed/3BROkjblFNg"
+            title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+
+        <small>Les questions ont été proposées sur Discord. Licence <a href="OFL.txt">OFL</a> Police d'écriture.</small>
+
+        <div class="bottomAction">
+            <p>Vous connaissez les règles ?</p>
+
+            <div class="buttons">
+                <button class="button simple" @click="changeSection('rules')">Non</button>
+                <button class="button" @click="changeSection('choosePlayers')">Oui</button>
+            </div>
+        </div>
+    </section>
+
+    <section x-show="section == 'rules'">
+        <h2>Règles du jeu</h2>
+
+        <ol>
+            <li>Chaque joueur va recevoir un débat, sauf un, qui n'aura rien (le Mytho).</li>
+            <li>La roulette va désigner le joueur qui devra commencer.</li>
+            <li>A tour de rôle, les joueurs vont débattre et donner leur avis sur la question.</li>
+            <li>Les joueurs délibèrent au bout de 3 tours et désignent le supposé Mytho.</li>
+        </ol>
+
+        <h3>But du jeu</h3>
+        <p>Le mytho doit débattre sans se faire cramer, les autres doivent penser qu'il connait le débat. Il peut gagner
+            1 point en plus si il réussit a devinner le débat à la fin des 3 tours.</p>
+        <p>Les joueurs doivent trouver le Mytho. Si il est demasqué, chaque joueur remporte 1 point. Si il ne l'ai pas,
+            il gagne 1 point.</p>
+
+        <div class="bottomAction">
+            <button class="button" @click="changeSection('choosePlayers')">compris !</button>
+        </div>
+    </section>
+
+    <section x-show="section == 'choosePlayers'">
+        <p>Combien de joueurs ?</p>
+
+        <input x-ref="playersCountInput" x-model="playersCount" @keyup="showQuestion()" type="number" pattern="\d*"
+            min="3" max="6" placeholder="3 à 6 joueurs" required="required" autofocus>
+    </section>
+
+    <section x-show="section == 'showQuestion'">
+        <div x-show="isPrivate">
+            <p x-show="currentPlayerShown != hiddenFor" x-text="question"></p>
+            <p x-show="currentPlayerShown == hiddenFor">Vous êtes le Mytho. Essayez de deviner le débat sans vous faire
+                cramer.</p>
+
+            <div class="bottomAction">
+                <p>J'ai lu et retenu la question.</p>
+                <button class="button block" @click="showQuestionForNextPlayer()">Masquer</button>
+            </div>
+        </div>
+
+        <div x-show="!isPrivate">
+            <p>Passez le téléphone au joueur à votre droite.</p>
+
+            <img src="give_tel_to_right.gif" alt="Donner le téléphone à la personne à droite">
+
+            <div class="bottomAction">
+                <p>J'ai bien reçu le téléphone et personne ne voit mon écran.</p>
+                <button class="button block" @click="isPrivate = true">Afficher la question</button>
+            </div>
+        </div>
+    </section>
+
+    <section x-show="section == 'wheel'">
+        <h3>Qui commence ?</h3>
+        <p>Placez le téléphone au centre de la table, et cliquez pour lancer la roue.</p>
+
+        <div class="wheel">
+            <svg class="wheelArrow" :style="{'transform': 'rotate(' + wheelDeg + 'deg)'}" version="1.1" id="Capa_1"
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                viewBox="0 0 53 53" style="enable-background:new 0 0 53 53;" xml:space="preserve">
+                <g>
+                    <polygon style="fill:#947D7A;"
+                        points="13.76,16.518 36.663,39.421 39.491,36.593 16.126,13.397 14.326,14.256 	" />
+                    <polygon style="fill:#B8B4B4;"
+                        points="35.637,37.566 36.737,46.366 53,52.73 46.636,36.466 37.836,35.366 	" />
+                    <path style="fill:#C8BAE8;"
+                        d="M6,16.27v2h2v2.036l10-0.036v-2l2-1v-8h-2v-2h-2v-3h-2v-2h-2l0-2H8v8H0v4h2v2h2v2H6z" />
+                </g>
+            </svg>
+        </div>
+
+        <div class="bottomAction">
+            <button class="button" x-show="wheelDeg == 0" @click="launchWheel()">Lancer</button>
+            <button class="button" x-show="canReplay" @click="playAgain()">Rejouer</button>
+        </div>
+    </section>
+
+</body>
+
+</html>

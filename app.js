@@ -23,6 +23,10 @@ document.addEventListener('alpine:init', () => {
         },
 
         changeSection(section) {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
             this.section = section;
             window.history.replaceState({}, '', `?sc=${section}&pc=${this.playersCount}`);
             if (section == 'choosePlayers') {
